@@ -151,10 +151,11 @@ class ItemController extends Controller
             ], 400);
         }
 
-        $product->available =$request->available;
-        $updated = $product;
-          $updated->save();
-
+        if($request->available!=$product->available) {
+            $product->available = $request->available;
+            $updated = $product;
+            $updated->save();
+        }
         if ($updated) {
             return response()->json([
                 'success' => true
