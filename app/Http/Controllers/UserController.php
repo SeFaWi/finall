@@ -20,20 +20,53 @@ class UserController extends Controller
 
     public function __construct()
 
-            {
-         //   $this->middleware('auth');
-            }
+    {
+        //$this->middleware('auth');
+    }
     public function index(Request $request)
     {
-        if ($request->has('name')) {
-            $bla = user::where('name', 'like', '%' . $request->name . '%')->get(['name', 'gender', 'email', 'image', 'Status']);
-
+            if ($request->has('first_name')) {
+                $user = user::query()->where('first_name', 'LIKE', "%$request->first_name%");
+              return $user-> paginate(8);
+            }
+        $bla = user::query()->get(['id', 'first_name', 'gender', 'image']);
 
             return $bla;
 
+    }
+    public function changeUC(Request $request,$id)
+    {
+            $user = user::find($id);
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, Item with id ' . $id . ' cannot be found'
+            ], 400);
         }
 
-        return user::all();
+            if($user->is_a_company!=$request->is_a_company)
+                $user->is_a_company = $request->is_a_company;
+            $user->save();
+
+        if ($user) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, user could not be change status'
+            ], 500);
+        }
+    }
+
+    public function change_status_U($id){
+
+        $user = user::find($id);
+        if($user->Status = 0){
+            $user->Status = 1;
+        }else{$user->Status= 0;}
+        $user->save();
     }
 
 

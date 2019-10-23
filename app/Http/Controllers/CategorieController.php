@@ -45,7 +45,17 @@ class CategorieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cate = Categories::create($request->all());
+        if ($cate) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, Item could not be updated'
+            ], 500);
+        }
     }
 
     /**
@@ -56,7 +66,7 @@ class CategorieController extends Controller
      */
     public function show($id)
     {
-        //
+        return Categories::findOrFail()($id);
     }
 
     /**
@@ -79,7 +89,29 @@ class CategorieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cate = Categories::findOrFail($id);
+
+        if (!$cate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, product with id ' . $id . ' cannot be found'
+            ], 400);
+        }
+
+        $updated = $cate->fill($request->all())
+            ->save();
+
+        if ($updated) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, Item could not be updated'
+            ], 500);
+        }
+
     }
 
     /**
@@ -88,8 +120,19 @@ class CategorieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        $cate = Categories::find($id);
+        $cate->delete();
+        if ($cate) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, Item could not be updated'
+            ], 500);
+        }
     }
 }

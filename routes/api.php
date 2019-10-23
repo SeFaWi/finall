@@ -12,7 +12,32 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('categories', 'CategorieController@index');
+Route::group(['middleware' => 'role:super_admin'], function() {
+    Route::post('/admin', function() {
+        return 'Welcome Admin';
+    });
+    Route::get('admin/user', 'UserController@index');
+    Route::get('admin/changeUC/{id}', 'UserController@changeUC');
+    Route::get('admin/user/{id}/change_status', 'UserController@change_statusU');
+    Route::get('admin/item/{id}/change_status', 'ItemController@change_statusI');
+    Route::get('admin/items', 'ItemController@AllItemAdmin');
+    Route::post('admin/categories', 'CategorieController@store');
+    Route::delete('admin/categories/delete/{id}', 'CategorieController@delete');
+    Route::get('admin/categories/{id}', 'CategorieController@show');
+    Route::put('admin/categories/{id}', 'CategorieController@update');
+    Route::post('admin/cities/', 'CitieController@store');
+    Route::delete('admin/cities/{id}', 'CitieController@delete');
+    Route::get('admin/cities', 'CitieController@index');
+    Route::put('admin/cities/{id}', 'CitieController@update');
+
+
+});
+Route::group(['middleware' => ['auth']], function () {
+
+
+    Route::get('categories', 'CategorieController@index');
+});
+
 Route::get('cities', 'CitieController@index');
 
 
@@ -30,7 +55,6 @@ Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
 Route::put('user/{id}',  'UserController@update');
 Route::get('user/{id}', 'UserController@showByid');
-Route::get('user', 'UserController@index');
 
 //Route::get('postt', 'postController@getcomment');
 

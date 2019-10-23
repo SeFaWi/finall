@@ -37,7 +37,38 @@ class ItemController extends Controller
             $item = $item->where('delivery', 'LIKE', "%$request->delivery%");
         }
 
-        return $item->paginate(10);
+        return $item->paginate(8);
+
+    }
+
+    public function AllItemAdmin(Request $request){
+        $item = Item::query()->with(array('user'=>function($query){
+            $query->select('id','email');
+        }));
+        if($request->has('categorie_id'))
+            $item = $item->where('categorie_id', 'LIKE', '%' . $request->categorie_id . '%');
+
+        return $item->paginate(8);
+    }
+    public function change_statusI($id){
+
+        $item = Item::find($id);
+        if($item->Status = 0){
+            $item->Status = 1;
+        }else{
+            $item->Status= 0;
+        }
+        $item->save();
+        if ($item) {
+            return response()->json([
+                'success' => true
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, Item could not be change Status'
+            ], 500);
+        }
 
     }
 
