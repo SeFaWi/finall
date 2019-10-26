@@ -23,7 +23,7 @@ class UserController extends Controller
     public function __construct()
 
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     public function index(Request $request)
     {
@@ -153,11 +153,11 @@ class UserController extends Controller
          return " Notfound";
 */
       // $user = User::find($id)->with('citie')->with('items')->where('Status', 'LIKE', '%' . 1 . '%');
-        $user = user::where('id',$id)->with('citie','items')->get();
+        $user = user::where('id',$id)->with('citie','items');
          $num = Item::where('user_id',$id)->count();
 
 
-        return $user.$num;
+        return $user->paginate(8);
 
     }
     public function showByname(Request $name)
