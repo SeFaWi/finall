@@ -21,8 +21,8 @@ class Item extends Model
             public function  images(){
                 return $this->hasMany('App\image');
             }
-    public function imageFrist() {
-        return $this->hasOne('App\image')->latest();
-    }
+            public function imageFrist() {
+                return $this->hasOne('App\image')->latest();
+            }
 
 }

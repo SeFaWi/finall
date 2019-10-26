@@ -150,7 +150,7 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        $user = Item::where('id' ,$id)->with('cities','user','categorie','images');
+        $user = Item::where('id' ,$id)->with('cities','user','categorie','images')->get();
 
         if (!$user) {
             return response()->json([
@@ -158,8 +158,8 @@ class ItemController extends Controller
                 'message' => 'Sorry, user with id ' . $id . ' cannot be found'
             ], 400);
         }
+        return  $user;
 
-        return $user->paginate(10);
     }
 
     /**
