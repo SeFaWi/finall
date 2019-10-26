@@ -51,12 +51,6 @@ class AuthController extends Controller
         return response()->json(compact('user','token'),201);
 
 
-
-
-
-
-
-        return " sigup done ";
     }
 
     /**

@@ -34,26 +34,27 @@ Route::group(['middleware' => 'role:super_admin'], function() {
 Route::group(['middleware' => ['auth']], function () {
 
     Route::put('item/{id}/change_availability', 'ItemController@change_availability');
+    Route::delete('item/delete/{id}', 'ItemController@delete');
+    Route::put('item/{id}', 'ItemController@update');
+    Route::post('item', 'ItemController@store');
+    Route::post('editprofile', 'UserController@editprofile');
+    Route::put('user/{id}',  'UserController@update');
+
 
 });
-Route::get('categories', 'CategorieController@index');
 
 Route::get('cities', 'CitieController@index');
+Route::get('categories', 'CategorieController@index');
 
-Route::post('editprofile', 'UserController@editprofile');
 
 
-Route::post('item', 'ItemController@store');
 Route::get('item', 'ItemController@index');
 Route::get('item/{id}', 'ItemController@show');
-Route::put('item/{id}', 'ItemController@update');
-Route::delete('item/delete/{id}', 'ItemController@delete');
 Route::get('showByname', 'UserController@showByname');
 
 
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
-Route::put('user/{id}',  'UserController@update');
 Route::get('user/{id}', 'UserController@showByid');
 
 //Route::get('postt', 'postController@getcomment');
