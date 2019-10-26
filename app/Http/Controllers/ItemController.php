@@ -25,14 +25,13 @@ class ItemController extends Controller
     public function __construct()
 
     {
-        $this->middleware('auth');
+      //  $this->middleware('auth');
     }
     public function index(Request $request)
     {
 
 
         $item = Item::query()->with('user','imageFrist')->where('Status', 'LIKE', '%' . 1 . '%');
-
         if ($request->has('categorie_id')) {
 
             $item = $item->where('categorie_id', 'LIKE', "%$request->categorie_id%");
@@ -44,6 +43,10 @@ class ItemController extends Controller
         if ($request->has('delivery')) {
 
             $item = $item->where('delivery', 'LIKE', "%$request->delivery%");
+        }
+        if ($request->has('itemname')) {
+
+            $item = $item->where('name', 'LIKE', "%$request->itemname%");
         }
 
         return $item->paginate(8);
