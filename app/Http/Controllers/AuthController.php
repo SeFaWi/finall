@@ -26,6 +26,7 @@ class AuthController extends Controller
     public function signup(request $request){
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -36,11 +37,11 @@ class AuthController extends Controller
 
         $user = user::create([
             'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
             'cities_id' => $request->get('cities_id'),
-            'first_name' => $request->get('first_name'),
             'email' => $request->get('email'),
             'gender' => $request->get('gender'),
+            'phone' => $request->get('phone'),
 
             'password' => Hash::make($request->get('password')),
         ]);

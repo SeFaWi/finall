@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('cities_id');
             $table->integer('is_a_company')->default('0');
             $table->integer('Status')->default('1');
+            $table->integer('phone');
             $table->timestamps();
             $table->rememberToken();
         });

@@ -18,5 +18,11 @@ class Item extends Model
             public function  categorie(){
                 return $this->belongsTo('App\Categories');
             }
+            public function  images(){
+                return $this->hasMany('App\image');
+            }
+    public function imageFrist() {
+        return $this->hasOne('App\image')->latest();
+    }
 
 }

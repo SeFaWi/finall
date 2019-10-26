@@ -18,9 +18,10 @@ Route::group(['middleware' => 'role:super_admin'], function() {
     });
     Route::get('admin/user', 'UserController@index');
     Route::get('admin/changeUC/{id}', 'UserController@changeUC');
-    Route::get('admin/user/{id}/change_status', 'UserController@change_statusU');
+    Route::post('admin/user/{id}/change_status', 'UserController@change_status_U');
     Route::get('admin/item/{id}/change_status', 'ItemController@change_statusI');
     Route::get('admin/items', 'ItemController@AllItemAdmin');
+    Route::delete('admin/item/delete/{id}', 'ItemController@deleteAdmin');
     Route::post('admin/categories', 'CategorieController@store');
     Route::delete('admin/categories/delete/{id}', 'CategorieController@delete');
     Route::get('admin/categories/{id}', 'CategorieController@show');
@@ -29,17 +30,17 @@ Route::group(['middleware' => 'role:super_admin'], function() {
     Route::delete('admin/cities/{id}', 'CitieController@delete');
     Route::get('admin/cities', 'CitieController@index');
     Route::put('admin/cities/{id}', 'CitieController@update');
-
-
 });
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::put('item/{id}/change_availability', 'ItemController@change_availability');
 
-    Route::get('categories', 'CategorieController@index');
 });
+Route::get('categories', 'CategorieController@index');
 
 Route::get('cities', 'CitieController@index');
 
+Route::post('editprofile', 'UserController@editprofile');
 
 
 Route::post('item', 'ItemController@store');
@@ -47,7 +48,6 @@ Route::get('item', 'ItemController@index');
 Route::get('item/{id}', 'ItemController@show');
 Route::put('item/{id}', 'ItemController@update');
 Route::delete('item/delete/{id}', 'ItemController@delete');
-Route::put('item/{id}/change_availability', 'ItemController@change_availability');
 Route::get('showByname', 'UserController@showByname');
 
 
@@ -70,5 +70,6 @@ Route::group([
 
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
+
 
 });

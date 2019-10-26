@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\image;
 use App\Item;
 use Illuminate\Http\Request;
 use JWTAuth;
+use Illuminate\Support\Facades\Auth;
+use Storage;
 use App\user;
+
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
@@ -18,11 +22,16 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
 
 
-        $item = Item::query()->with('user')->where('Status', 'LIKE', '%' . 1 . '%');
+        $item = Item::query()->with('user','imageFrist')->where('Status', 'LIKE', '%' . 1 . '%');
 
         if ($request->has('categorie_id')) {
 
@@ -52,23 +61,24 @@ class ItemController extends Controller
     }
     public function change_statusI($id){
 
-        $item = Item::find($id);
-        if($item->Status = 0){
-            $item->Status = 1;
-        }else{
-            $item->Status= 0;
-        }
-        $item->save();
-        if ($item) {
-            return response()->json([
-                'success' => true
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Item could not be change Status'
-            ], 500);
-        }
+
+            $bla = Item::find($id);
+                switch ($bla->Status) {
+                    case "1" :
+                        $bla->Status = 0;
+                        $bla->save();
+                        return response()->json([
+                            'success' => true,
+                        ]);;
+                    case "0" :
+                        $bla->Status = 1;
+                        $bla->save();
+                        return response()->json([
+                            'success' => true,
+                        ], 200);
+                }
+
+            return " auth error";
 
     }
 
@@ -91,8 +101,36 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-      JWTAuth::user()->items()->create($request->all());
+      //JWTAuth::user()->items()->create($request->all());
+        $user = Auth::user();
+        $description = $request->description;
+        $name = $request->name;
+        $address = $request->address;
+        $categorie_id = $request->categorie_id;
+        $city_id = $request->city_id;
+        $delivery = $request->delivery;
+        $iamges = array($request->images);
 
+        $item = Item::create([
+            'name' => $name,
+            'description' => $description,
+            'address' => $address,
+            'categorie_id' => $categorie_id,
+            'city_id' => $city_id,
+            'delivery' => $delivery,
+            'user_id' => $user->id,
+        ]);
+        foreach($iamges as $iamge){
+
+            $iamgePath = Storage::disk('uploads')->put( '/images/',$iamge);
+
+            image::create([
+                'item_id' =>$item->id,
+                'path' =>'/uploads/images'.$iamgePath
+
+            ]);
+        }
+        return response()->json(['error'=> false,'data' =>$item]);
 
        //  $post = new Item();
         //$post->name=$request->name;
@@ -102,7 +140,6 @@ class ItemController extends Controller
          //$post->city_id=$request->city_id;
          //$post->address=$request->address;
          //$post->save();
-         return "Item created";
     }
 
     /**
@@ -113,7 +150,7 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        $user = Item::where('id' ,$id)->with('cities','user','categorie');
+        $user = Item::where('id' ,$id)->with('cities','user','categorie','images');
 
         if (!$user) {
             return response()->json([
@@ -145,23 +182,26 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Item::find($id);
+        $item = Item::find($id);
+        $userId = Auth::id();
+        if($item->user_id == $userId) {
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, item with id ' . $id . ' cannot be found'
+                ], 400);
+            }
 
-        if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, product with id ' . $id . ' cannot be found'
-            ], 400);
+            $updated = $item->fill($request->all())
+                ->save();
+
+            if ($updated) {
+                return response()->json([
+                    'success' => true
+                ]);
+            }
         }
-
-        $updated = $product->fill($request->all())
-            ->save();
-
-        if ($updated) {
-            return response()->json([
-                'success' => true
-            ]);
-        } else {
+        else {
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, Item could not be updated'
@@ -169,34 +209,30 @@ class ItemController extends Controller
         }
 
     }
-    public function change_availability(Request $request, $id)
+    public function change_availability($id)
     {
 
-
-        $product = Item::find($id);
-
-        if (!$product) {
+        $bla = Item::find($id);
+        $userId = Auth::id();
+        if($bla->user_id == $userId) {
+    switch ($bla->available) {
+        case "1" :
+            $bla->available = 0;
+            $bla->save();
             return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Item with id ' . $id . ' cannot be found'
-            ], 400);
-        }
+                'success' => true,
+            ]);;
+        case "0" :
+            $bla->available = 1;
+            $bla->save();
+            return response()->json([
+                'success' => true,
+            ], 200);
+    }
+}
+return " auth error";
 
-        if($request->available!=$product->available) {
-            $product->available = $request->available;
-            $updated = $product;
-            $updated->save();
-        }
-        if ($updated) {
-            return response()->json([
-                'success' => true
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sorry, Availability could not be updated'
-            ], 500);
-        }
+
     }
 
     /**
@@ -208,6 +244,26 @@ class ItemController extends Controller
     public function delete($id)
     {
         $item = Item::Find($id);
+        $userId = Auth::id();
+        if($item->user_id == $userId) {
+        $item->delete();
+
+        if ($item) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        }else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, you cant delete or not find '
+            ], 300);
+        }
+
+    }
+    public function deleteAdmin($id)
+    {
+        $item = Item::Find($id);
         $item->delete();
 
         if ($item) {
@@ -217,8 +273,9 @@ class ItemController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, Availability could not be updated'
+                'message' => 'Sorry, item could not be delete'
             ], 500);
-        }
+          }
+
     }
 }
