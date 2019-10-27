@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('cities', 'CitieController@index');
 Route::get('categories', 'CategorieController@index');
-Route::get('user/getcompany', 'UserController@getcompany');
+Route::get('user/company', 'UserController@getcompany');
 
 
 

@@ -34,6 +34,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'gender'=>'0',
         'cities_id'=>'1',
         'email'=>'lil@lili.com',
+        'phone'=>'000000000',
         'password'=>bcrypt('123456')
     ]);
     $admin->assignRole($a);

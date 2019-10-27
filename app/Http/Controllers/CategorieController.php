@@ -19,11 +19,11 @@ class CategorieController extends Controller
             return  Categories::all("id","name");
         } elseif ($request->has('first'))
         {
-                    return Categories::all('id','name')->whereBetween('id',[1 , 3]);
+                    return Categories::all('id','name')->whereBetween('id',[1 , $request->first]);
         }
         else {
             $cate = Categories::query();
-            return $cate->paginate(10);
+            return $cate->paginate(8);
         }
     }
 

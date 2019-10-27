@@ -44,8 +44,8 @@ class UserController extends Controller
 
     }
     public function  getcompany(){
-        $user  = User::query()->with('citie')->where('Status', 'LIKE', '%' . 1 . '%')->where('is_a_company', 'LIKE', '%' . 1 . '%')->get();
-        return $user;
+        $user  = User::query()->with('citie')->where('Status', 'LIKE', '%' . 1 . '%')->where('is_a_company', 'LIKE', '%' . 1 . '%');
+        return $user->paginate(8);;
     }
     public function changeUC(Request $request,$id)
     {

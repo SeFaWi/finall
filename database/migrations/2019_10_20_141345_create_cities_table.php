@@ -19,6 +19,7 @@ class CreateCitiesTable extends Migration
             $table->timestamps();
 
         });
+
     }
 
     /**
