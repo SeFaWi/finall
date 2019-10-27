@@ -16,7 +16,6 @@ Route::group(['middleware' => 'role:super_admin'], function() {
     Route::post('/admin', function() {
         return 'Welcome Admin';
     });
-    Route::get('admin/user', 'UserController@index');
     Route::get('admin/changeUC/{id}', 'UserController@changeUC');
     Route::post('admin/user/{id}/change_status', 'UserController@change_status_U');
     Route::get('admin/item/{id}/change_status', 'ItemController@change_statusI');
@@ -31,6 +30,8 @@ Route::group(['middleware' => 'role:super_admin'], function() {
     Route::get('admin/cities', 'CitieController@index');
     Route::put('admin/cities/{id}', 'CitieController@update');
 });
+Route::get('admin/user', 'UserController@index');
+
 Route::group(['middleware' => ['auth']], function () {
 
     Route::put('item/{id}/change_availability', 'ItemController@change_availability');
@@ -45,6 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('cities', 'CitieController@index');
 Route::get('categories', 'CategorieController@index');
+Route::get('user/getcompany', 'UserController@getcompany');
 
 
 
@@ -73,4 +75,9 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
 
 
+
+
+
+
 });
+Route::get('role', 'RoleController@index');

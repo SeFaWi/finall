@@ -2,14 +2,22 @@
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 use App\user;
 
 
 class RolesAndPermissionsSeeder extends Seeder
 {
 
+
     public function run()
 {
+    //
+
+
+
+
     // Reset cached roles and permissions
     app()['cache']->forget('spatie.permission.cache');
 
@@ -25,7 +33,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'last_name'=>"hejazi",
         'gender'=>'0',
         'cities_id'=>'1',
-        'email'=>'lil@gmail.com',
+        'email'=>'lil@lili.com',
         'password'=>bcrypt('123456')
     ]);
     $admin->assignRole($a);

@@ -5,7 +5,9 @@ use App\Item;
 use App\user;
 use Illuminate\Http\Request;
 use App\Traits\UploadTrait;
-
+use Spatie\Permission\Models\Role;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
@@ -27,14 +29,23 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
+       // $roles = Role::all();
+        //$users = User::whereHas("roles", function($q){ $q->where("name", "super_admin"); });
+//        return User::with('roles.name')->get();
+
             if ($request->has('first_name')) {
                 $user = user::query()->where('first_name', 'LIKE', "%$request->first_name%");
-              return $user-> paginate(8);
+                return $user->paginate(8);
             }
         $bla = user::query()->get(['id', 'first_name', 'gender', 'image']);
 
             return $bla;
 
+
+    }
+    public function  getcompany(){
+        $user  = User::query()->with('citie')->where('Status', 'LIKE', '%' . 1 . '%')->where('is_a_company', 'LIKE', '%' . 1 . '%')->get();
+        return $user;
     }
     public function changeUC(Request $request,$id)
     {
