@@ -50,7 +50,8 @@ if(Auth::user()->hasRole('super_admin'))
                 $user = user::query()->where('first_name', 'LIKE', "%$request->first_name%");
                 return $user->paginate(8);
             }
-            $bla = user::query()->get(['id', 'first_name', 'gender', 'image']);
+
+            $bla = user::query()->with('citie:id,name')->get(['id', 'first_name','last_name','email','phone','cities_id', 'Status','created_at']);
             return $bla;
 
         }elseif ((Auth::user()->hasRole('city_admin'))){
