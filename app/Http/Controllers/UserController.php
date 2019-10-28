@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Item;
 use App\user;
+
 use Illuminate\Http\Request;
 use App\Traits\UploadTrait;
 use Spatie\Permission\Models\Role;
@@ -27,25 +28,41 @@ class UserController extends Controller
     {
         //$this->middleware('auth');
     }
+    public function  test(Request $role)
+    {
+
+
+
+
+if(Auth::user()->hasRole('super_admin'))
+        {return "from admin";}
+        return "hoel shit";
+            // assign all permissions to admin role}
+    }
     public function index(Request $request)
     {
        // $roles = Role::all();
         //$users = User::whereHas("roles", function($q){ $q->where("name", "super_admin"); });
 //        return User::with('roles.name')->get();
+        if(Auth::user()->hasRole('super_admin')) {
 
             if ($request->has('first_name')) {
                 $user = user::query()->where('first_name', 'LIKE', "%$request->first_name%");
                 return $user->paginate(8);
             }
-        $bla = user::query()->get(['id', 'first_name', 'gender', 'image']);
-
+            $bla = user::query()->get(['id', 'first_name', 'gender', 'image']);
             return $bla;
 
-
+        }elseif ((Auth::user()->hasRole('city_admin'))){
+             $cityID =auth::user()->cities_id;
+             $adminID=auth::user()->id;
+             return User::query()->where('cities_id','LIKE',"$cityID")->where('id','!=',"$adminID")->get();
+        }
+        return "dont have access";
     }
     public function  getcompany(){
         $user  = User::query()->with('citie')->where('Status', 'LIKE', '%' . 1 . '%')->where('is_a_company', 'LIKE', '%' . 1 . '%');
-        return $user->paginate(8);;
+        return $user->paginate(8);
     }
     public function changeUC(Request $request,$id)
     {
