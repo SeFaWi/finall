@@ -30,7 +30,6 @@ class ItemController extends Controller
     public function index(Request $request)
     {
 
-
         $item = Item::query()->with('user','imageFrist')->where('Status', 'LIKE', '%' . 1 . '%');
         if ($request->has('categorie_id')) {
 
@@ -48,9 +47,7 @@ class ItemController extends Controller
 
             $item = $item->where('name', 'LIKE', "%$request->itemname%");
         }
-
-        return $item->paginate(8);
-
+        return $item->paginate(9);
     }
 
     public function AllItemAdmin(Request $request){
@@ -60,7 +57,7 @@ class ItemController extends Controller
         if($request->has('categorie_id'))
             $item = $item->where('categorie_id', 'LIKE', '%' . $request->categorie_id . '%');
 
-        return $item->paginate(8);
+        return $item->paginate(9);
     }
     public function change_statusI($id){
 
@@ -125,11 +122,10 @@ class ItemController extends Controller
         ]);
         foreach($iamges as $iamge){
 
-            $iamgePath = Storage::disk('uploads')->put( '/images/',$iamge);
-
+            $iamgePath = Storage::disk('storage')->put('images', $iamge);
             image::create([
                 'item_id' =>$item->id,
-                'path' =>'/uploads/images'.$iamgePath
+                'path' =>Storage::url($iamgePath)
 
             ]);
         }

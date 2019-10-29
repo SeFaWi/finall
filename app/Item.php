@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    protected $with = ['cities'];
     protected $fillable = [
         'name','Status','description','available','categorie_id','delivery','city_id','user_id','address',
     ];
