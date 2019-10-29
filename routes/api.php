@@ -30,9 +30,9 @@ Route::group(['middleware' => 'role:super_admin'], function() {
     Route::get('admin/cities', 'CitieController@index');
     Route::put('admin/cities/{id}', 'CitieController@update');
 });
-Route::get('admin/user', 'UserController@index');
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('admin/user', 'UserController@index');
 
     Route::put('item/{id}/change_availability', 'ItemController@change_availability');
     Route::delete('item/delete/{id}', 'ItemController@delete');
@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 });
+Route::get('test', 'UserController@test');
 
 Route::get('cities', 'CitieController@index');
 Route::get('categories', 'CategorieController@index');

@@ -45,7 +45,7 @@ class user extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Item');
     }
     public function citie(){
-        return $this->belongsTo('App\Cities','cities_id');
+        return $this->belongsTo('App\Cities','cities_id','id');
     }
     /**
      * The attributes that should be cast to native types.
