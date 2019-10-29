@@ -12,6 +12,7 @@
         "barryvdh/laravel-cors": "^0.11.4",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
+        "laravel/socialite": "^4.2",
         "laravel/tinker": "^1.0",
         "spatie/laravel-permission": "^2.38",
         "tymon/jwt-auth": "dev-develop"
