@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Item;
 use App\user;
+use Storage;
 
 use Illuminate\Http\Request;
 use App\Traits\UploadTrait;
@@ -123,7 +124,7 @@ if(Auth::user()->hasRole('super_admin'))
         $user->first_name = $request->input('first_name');
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+        $user->password = Hash::make($request->input('password'));
         $user->gender = $request->input('gender');
         $user->cities_id = $request->input('cities_id');
         $user->phone = $request->input('phone');
@@ -131,17 +132,15 @@ if(Auth::user()->hasRole('super_admin'))
         // Check if a profile image has been uploaded
         if ($request->has('image')) {
             // Get image file
-            $image = $request->file('image');
+            $image = $request->image;
+            $iamgePath = Storage::disk('storage')->put('images', $image);
+            $user->image  =Storage::url($iamgePath);
+            
+
             // Make a image name based on user name and current timestamp
-            $name = str_slug($request->input('name')) . '_' . time();
             // Define folder path
-            $folder = '/uploads/images/';
             // Make a file path where image will be stored [ folder path + file name + file extension]
-            $filePath = $folder . $name . '.' . $image->getClientOriginalExtension();
-            // Upload image
-            $this->uploadOne($image, $folder, 'public', $name);
             // Set user profile image path in database to filePath
-            $user->image = $filePath;
         }
         $user->save();
 

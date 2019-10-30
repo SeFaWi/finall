@@ -70,5 +70,7 @@ class user extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    protected $with = ['citie'];
+
 
 }
