@@ -17,11 +17,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class ItemController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function __construct()
 
     {
@@ -82,23 +78,12 @@ class ItemController extends Controller
 
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
       //JWTAuth::user()->items()->create($request->all());
@@ -131,22 +116,16 @@ class ItemController extends Controller
         }
         return response()->json(['error'=> false,'data' =>$item]);
 
-       //  $post = new Item();
-        //$post->name=$request->name;
-         //$post->description=$request->description;
-         //$post->user_id=$request->user_id;
-         //$post->categorie_id=$request->categorie_id;
-         //$post->city_id=$request->city_id;
-         //$post->address=$request->address;
-         //$post->save();
+
+    }
+    public function itemsshowByiduser($id)
+    {
+
+        $item = Item::query()->where('user_id','=',"$id")->with('imageFrist');
+        return $item->paginate(8);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $user = Item::where('id' ,$id)->with('cities','user','categorie','images')->get();
@@ -161,25 +140,6 @@ class ItemController extends Controller
 
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $item = Item::find($id);

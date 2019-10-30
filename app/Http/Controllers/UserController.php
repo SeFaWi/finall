@@ -17,11 +17,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
 
     use UploadTrait;
     public function __construct()
@@ -145,41 +141,17 @@ if(Auth::user()->hasRole('super_admin'))
         $user->save();
 
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
       //  user::create($request->all());
      //   return "done";
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function showByid($id)
     {
-        /**
-         if( user::where('id' ,'=',$id)->get());
-        return "Error false";
-         return " Notfound";
-*/
+
       // $user = User::find($id)->with('citie')->with('items')->where('Status', 'LIKE', '%' . 1 . '%');
         $user = user::where('id',$id)->with('citie','items');
          $num = Item::where('user_id',$id)->count();
@@ -190,11 +162,7 @@ if(Auth::user()->hasRole('super_admin'))
     }
     public function showByname(Request $name)
     {
-        /**
-         if( user::where('id' ,'=',$id)->get());
-        return "Error false";
-         return " Notfound";
-      // $user = User::find($id)->with('citie')->with('items')->where('Status', 'LIKE', '%' . 1 . '%');*/
+
         $user = user::where('Status', 'LIKE', '%' . 1 . '%')->where('first_name','like', '%'. $name->first_name .'%');
 
         if (!$user) {
@@ -234,12 +202,7 @@ if(Auth::user()->hasRole('super_admin'))
                 ], 500);
             }
         }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         //

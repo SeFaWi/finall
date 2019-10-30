@@ -59,6 +59,7 @@ Route::get('showByname', 'UserController@showByname');
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
 Route::get('user/{id}', 'UserController@showByid');
+Route::get('IU/{id}', 'ItemController@itemsshowByiduser');
 
 //Route::get('postt', 'postController@getcomment');
 
@@ -81,4 +82,5 @@ Route::group([
 
 
 });
-Route::get('role', 'RoleController@index');
+Route::get('/redirect', 'SocialAuthFacebookController@redirect');
+Route::get('/callback', 'SocialAuthFacebookController@callback');
