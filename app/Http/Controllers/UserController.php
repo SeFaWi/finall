@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use JWTAuth;
+
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -25,11 +26,11 @@ class UserController extends Controller
     {
         //$this->middleware('auth');
     }
-    public function  test(Request $role)
+    public function  adduseradmin($id)
     {
-
-
-
+        $admin = user::find($id);
+        $admin->assignRole(['super_admin']);
+        return 'done';
 
 if(Auth::user()->hasRole('super_admin'))
         {return "from admin";}
@@ -131,7 +132,7 @@ if(Auth::user()->hasRole('super_admin'))
             $image = $request->image;
             $iamgePath = Storage::disk('storage')->put('images', $image);
             $user->image  =Storage::url($iamgePath);
-            
+
 
             // Make a image name based on user name and current timestamp
             // Define folder path

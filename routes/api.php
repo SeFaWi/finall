@@ -50,16 +50,16 @@ Route::get('categories', 'CategorieController@index');
 Route::get('user/company', 'UserController@getcompany');
 
 
-Route::get('me', 'AuthController@me');
 Route::get('item', 'ItemController@index');
 Route::get('item/{id}', 'ItemController@show');
 Route::get('showByname', 'UserController@showByname');
 
-
+Route::get('me', 'AuthController@me');
 Route::post('login', 'AuthController@login');
 Route::post('signup', 'AuthController@signup');
 Route::get('user/{id}', 'UserController@showByid');
 Route::get('IU/{id}', 'ItemController@itemsshowByiduser');
+Route::post('adduseradmin/{id}', 'UserController@adduseradmin');
 
 //Route::get('postt', 'postController@getcomment');
 
